@@ -183,12 +183,9 @@ public class TicTacToeGUI extends JFrame {
     }
 
     private void handleButtonClick(int row, int col, JButton button) {
-        // If vsComputer and it's O's turn, ignore human clicks
+        // If vsComputer and it's O's turn, ignore human clicks (board should be disabled during thinking)
         if (vsComputer && game.getCurrentPlayer() == 'O') {
-            JOptionPane.showMessageDialog(this,
-                    "Wait for computer's move!",
-                    "Hold on",
-                    JOptionPane.INFORMATION_MESSAGE);
+            // silently ignore (no JOptionPane) because board is disabled while computer thinks
             return;
         }
 
@@ -214,7 +211,24 @@ public class TicTacToeGUI extends JFrame {
 
         // Computer's turn (if mode is vsComputer)
         if (vsComputer && game.getCurrentPlayer() == 'O') {
-            performComputerMove();
+            // Show thinking status and disable board to prevent clicks
+            statusLabel.setText("Computer is thinking...");
+            setBoardEnabled(false);
+
+            // Delay before computer moves (milliseconds)
+            int delayMs = 600; // change this value for faster/slower bot
+
+            Timer timer = new Timer(delayMs, evt -> {
+                performComputerMove();
+
+                // If game hasn't ended after computer move, enable only empty cells
+                if (!game.checkWin() && !game.isDraw()) {
+                    setBoardEnabled(true);
+                    statusLabel.setText("Player " + game.getCurrentPlayer() + "'s turn");
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
         }
     }
 
@@ -334,6 +348,24 @@ public class TicTacToeGUI extends JFrame {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 buttons[i][j].setEnabled(false);
+            }
+        }
+    }
+
+    /**
+     * Enables/disables only empty cells when enabling.
+     * When disabling, disable all buttons.
+     */
+    private void setBoardEnabled(boolean enabled) {
+        char[][] board = game.getBoard();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (!enabled) {
+                    buttons[i][j].setEnabled(false);
+                } else {
+                    // Only enable the button if the board cell is empty
+                    buttons[i][j].setEnabled(board[i][j] == ' ');
+                }
             }
         }
     }

@@ -15,8 +15,7 @@
     </properties>
 
     <dependencies>
-        <!-- JUnit 5 -->
-        <dependency>
+              <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.10.0</version>
@@ -27,7 +26,7 @@
     <build>
         <plugins>
 
-            <!-- Plugin to run application using: mvn exec:java -->
+            
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -37,7 +36,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Plugin for JUnit 5 test execution -->
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -47,7 +46,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Plugin to make JAR executable -->
+         
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
